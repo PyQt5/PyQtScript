@@ -1,0 +1,79 @@
+version: 5.13.1.{build}
+skip_non_tags: true
+cache:
+  - C:\Qt\5.13.1
+environment:
+  matrix:
+  - PYTHON: C:\Python35
+    TAG: cp35
+    PLATFORM: x86
+    DISTUTILS_USE_SDK: 1
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    QTDIR: "C:\\Qt\\5.13.1\\5.13.1\\msvc2017"
+    PATH: "%QTDIR%\\bin;%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - PYTHON: C:\Python35-x64
+    TAG: cp35
+    PLATFORM: x64
+    DISTUTILS_USE_SDK: 1
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    QTDIR: "C:\\Qt\\5.13.1\\5.13.1\\msvc2017_64"
+    PATH: "%QTDIR%\\bin;%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - PYTHON: C:\Python36
+    TAG: cp36
+    PLATFORM: x86
+    DISTUTILS_USE_SDK: 1
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    QTDIR: "C:\\Qt\\5.13.1\\5.13.1\\msvc2017"
+    PATH: "%QTDIR%\\bin;%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - PYTHON: C:\Python36-x64
+    TAG: cp36
+    PLATFORM: x64
+    DISTUTILS_USE_SDK: 1
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    QTDIR: "C:\\Qt\\5.13.1\\5.13.1\\msvc2017_64"
+    PATH: "%QTDIR%\\bin;%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - PYTHON: C:\Python37
+    TAG: cp37
+    PLATFORM: x86
+    DISTUTILS_USE_SDK: 1
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    QTDIR: "C:\\Qt\\5.13.1\\5.13.1\\msvc2017"
+    PATH: "%QTDIR%\\bin;%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - PYTHON: C:\Python37-x64
+    TAG: cp37
+    PLATFORM: x64
+    DISTUTILS_USE_SDK: 1
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    QTDIR: "C:\\Qt\\5.13.1\\5.13.1\\msvc2017_64"
+    PATH: "%QTDIR%\\bin;%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+build_script:
+- cmd: >-
+    "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%
+
+    python  --version
+
+    python -m pip install twine requests -U
+
+    echo "install qt 5.13.1"
+
+    python qtinstaller.py --platform=Windows --qtver=5.13.1 --dir=C:\Qt\5.13.1
+
+    echo "python build.py --platform=Windows --arch=%PLATFORM% --build=sip --sipver=4.19.19 --pyqtver=5.13.1 --qmake=%QTDIR%\bin\qmake.exe"
+
+    python build.py --platform=Windows --arch=%PLATFORM% --build=sip --sipver=4.19.19 --pyqtver=5.13.1 --qmake=%QTDIR%\bin\qmake.exe
+
+    echo "python build.py --platform=Windows --arch=%PLATFORM% --build=PyQt5 --sipver=4.19.19 --pyqtver=5.13.1 --qmake=%QTDIR%\bin\qmake.exe"
+
+    python build.py --platform=Windows --arch=%PLATFORM% --build=PyQt5 --sipver=4.19.19 --pyqtver=5.13.1 --qmake=%QTDIR%\bin\qmake.exe
+test_script:
+- cmd: >-
+    echo "python mkdist.py --platform=Windows --arch=%PLATFORM% --version=5.13.1 --tags=%TAG%"
+
+    python mkdist.py --platform=Windows --arch=%PLATFORM% --version=5.13.1 --tags=%TAG%
+
+    echo "python test.py --platform=Windows --arch=%PLATFORM% --version=5.13.1 --tags=%TAG%"
+
+    python test.py --platform=Windows --arch=%PLATFORM% --version=5.13.1 --tags=%TAG%
+
+deploy_script:
+- cmd: python -m twine upload dist/* -u %PYPIUSER% -p %PYPIPASSORD%

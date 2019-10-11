@@ -1,0 +1,35 @@
+language: python
+sudo: required
+dist: xenial
+services:
+  - xvfb
+python:
+  - "3.5"
+branches:
+  only:
+    - master
+cache:
+  apt: true
+  directories:
+  - "$HOME/.cache/pip"
+  - "$HOME/.pyenv"
+  - "$HOME/Qt5.13.1"
+before_install:
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+before_script:
+  - export TZ='Asia/Shanghai'
+  - sed -i 's/\r$//' build.sh
+  - chmod 755 build.sh
+  - export QTVER=5.13.1
+  - export QTVERSTR="${QTVER//./}"
+  - export PYVER=$(python -c "import sys;print(\"{0}{1}\".format(sys.version_info.major, sys.version_info.minor))")
+  - if [ -f "/usr/bin/apt-get" ];then sudo apt-get install libx11-dev libxext-dev libxtst-dev libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev -y; fi
+  - if [ -f "/usr/bin/yum" ];then sudo yum install mesa-* freeglut* -y; fi
+script:
+  - pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com requests PyQt5==$QTVER
+  - python qtinstaller.py --platform=Linux --qtver=5.13.1 --dir=$HOME/Qt$QTVER
+  - python build.py --platform=Linux --arch=x64 --build=sip --sipver=4.19.19 --pyqtver=$QTVER --qmake=$HOME/Qt$QTVER/$QTVER/gcc_64/bin/qmake
+  - export PATH=$HOME/Qt$QTVER/$QTVER/gcc_64/bin:$PATH
+  - python build.py --platform=Linux --arch=x64 --build=PyQt5 --sipver=4.19.19 --pyqtver=$QTVER --qmake=$HOME/Qt$QTVER/$QTVER/gcc_64/bin/qmake
+  - python mkdist.py --platform=Linux --arch=x64 --version=$QTVER
+  - python test.py --platform=Linux --arch=x64 --version=$QTVER

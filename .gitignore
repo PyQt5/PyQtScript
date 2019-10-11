@@ -1,0 +1,8 @@
+*.pyc
+*.pyo
+dist
+build
+.idea
+src
+Windows
+Linux
