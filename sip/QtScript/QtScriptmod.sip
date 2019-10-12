@@ -45,14 +45,15 @@ WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 %DefaultSupertype sip.simplewrapper
 
+%Include qscriptable.sip
 %Include qscriptclass.sip
 %Include qscriptclasspropertyiterator.sip
 %Include qscriptcontext.sip
 %Include qscriptcontextinfo.sip
 %Include qscriptengine.sip
 %Include qscriptengineagent.sip
+%Include qscriptextensionplugin.sip
+%Include qscriptprogram.sip
 %Include qscriptstring.sip
 %Include qscriptvalue.sip
 %Include qscriptvalueiterator.sip
-%Include qscriptprogram.sip
-%Include qscriptextensionplugin.sip
