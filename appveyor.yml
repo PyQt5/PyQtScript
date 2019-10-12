@@ -3,6 +3,7 @@ skip_non_tags: true
 cache:
   - C:\Qt\5.13.1
 environment:
+  build_version: {version}
   matrix:
   - PYTHON: C:\Python35
     TAG: cp35
