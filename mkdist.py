@@ -46,8 +46,8 @@ print('Name:', Name)
 print(args.tags)
 Tags = '.'.join(args.tags)
 print('Tags:', Tags)
-build_version = os.environ.get('build_version', '')
-print('build_version:', build_version)
+build_version = os.environ.get('APPVEYOR_BUILD_VERSION', '')
+print('build_version :', build_version)
 
 # 创建描述信息目录
 dist_info_dir = '{0}-{1}.dist-info'.format(Name, '{0}.{1}'.format(args.version,

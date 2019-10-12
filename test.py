@@ -47,6 +47,8 @@ print('Name:', Name)
 print(args.tags)
 Tags = '.'.join(args.tags)
 print('Tags:', Tags)
+build_version = os.environ.get('APPVEYOR_BUILD_VERSION', '')
+print('build_version :', build_version)
 
 if args.platform == 'Windows':
     Tag = '{0}-none{1}'.format(Tags,
@@ -57,7 +59,9 @@ else:
     Tag = '{0}-none'.format(Tags)
 
 _main(['install', os.path.abspath(
-    'dist/{0}-{1}-{2}.whl'.format(Name, args.version, Tag))])
+    'dist/{0}-{1}-{2}.whl'.format(Name,
+                                  '{0}.{1}'.format(args.version, build_version) if build_version else args.version,
+                                  Tag))])
 
 if args.platform != 'Windows':
     # ln library
