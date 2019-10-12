@@ -32,9 +32,12 @@ public:
     QScriptable();
     ~QScriptable();
     QScriptEngine *engine() const;
-    QScriptContext context() const;
+    QScriptContext *context() const;
     QScriptValue thisObject() const;
     int argumentCount() const;
     QScriptValue argument(int index) const;
+
+private:
+    QScriptable(const QScriptable &);
 };
 //%End
