@@ -50,8 +50,7 @@ build_version = os.environ.get('APPVEYOR_BUILD_VERSION', '')
 print('build_version :', build_version)
 
 # 创建描述信息目录
-dist_info_dir = '{0}-{1}.dist-info'.format(Name, '{0}.{1}'.format(args.version,
-                                                                  build_version) if build_version else args.version)
+dist_info_dir = '{0}-{1}.dist-info'.format(Name, build_version if build_version else args.version)
 os.makedirs(dist_info_dir, exist_ok=True)
 
 info_files = []
@@ -95,7 +94,7 @@ Wheels for the GPL version for 32 Windows can be installed from PyPI::
 
 The wheels include a copy of the required parts of the LGPL version of Qt.
 
-""".format(Name=Name, VersionMe='{0}.{1}'.format(args.version, build_version) if build_version else args.version,
+""".format(Name=Name, VersionMe=build_version if build_version else args.version,
            Version=args.version, Platform=args.platform)
 path = os.path.join(dist_info_dir, 'METADATA')
 info_files.append(Path(path))
@@ -149,8 +148,7 @@ print('wirte dist info ok')
 os.makedirs('dist', exist_ok=True)
 dist_file = os.path.join(
     'dist',
-    '{0}-{1}-{2}.whl'.format(Name, '{0}.{1}'.format(args.version, build_version) if build_version else args.version,
-                             Tag))
+    '{0}-{1}-{2}.whl'.format(Name, build_version if build_version else args.version, Tag))
 print('make {0}'.format(dist_file))
 zipfp = ZipFile(dist_file, 'w', ZIP_DEFLATED)
 for path in info_files:

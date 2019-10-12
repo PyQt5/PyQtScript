@@ -59,9 +59,7 @@ else:
     Tag = '{0}-none'.format(Tags)
 
 _main(['install', os.path.abspath(
-    'dist/{0}-{1}-{2}.whl'.format(Name,
-                                  '{0}.{1}'.format(args.version, build_version) if build_version else args.version,
-                                  Tag))])
+    'dist/{0}-{1}-{2}.whl'.format(Name, build_version if build_version else args.version, Tag))])
 
 if args.platform != 'Windows':
     # ln library
