@@ -171,15 +171,6 @@ def qtToDomKey(keyCode):
     return keyCode
 
 
-def colorFromString(name):
-    name = name.replace(' ', '')
-    if name.startswith('rgba'):
-        return
-    if name.startswith('rgb'):
-        return
-    return QColor(name)
-
-
 class Document(QObject):
 
     @pyqtSlot(str)
